@@ -58,22 +58,21 @@ def add_data_to_matrix(list, PACS_dir, folder_name, color):
             continue
 
 
-def normalize_data(df: np.array) -> np.array:
-    """ 
-    Normalize NumPy array feature by feature 
+class Standardize(object):
+    __mean = None
+    __std = None
 
-    Parameters
-    ----------
-    df : np.array
-        The dataset which has to be normalized
-    Return
-    ------
-    out : np.array
-        The dataset normalized
-    """
-    df = (df - np.mean(df, axis=0)) / np.std(df, axis=0)
-    return df
+    def do(self, data):
+        new = np.array(data)
+        self.__mean = np.mean(new, axis=0)
+        self.__std = np.std(new, axis=0)
+        new = (new - self.__mean) / self.__std
+        return new
 
+    def undo(self, data):
+        new = np.array(data)
+        new = new * self.__std + self.__mean
+        return new
 
 if (len(sys.argv) != 3 and len(sys.argv) != 4):
     print("Error: wrong number of parameter")
@@ -88,58 +87,99 @@ else:
     exit(-1)
 
 # Standardize the features
-scaler = StandardScaler()
-X_n = scaler.fit_transform(X)
-X_n = normalize_data(X)
+st = Standardize()
+X_n = st.do(X)
 
-pca_60 = PCA(60)
-X_60 = pca_60.fit_transform(X_n)
-app_60 = pca_60.inverse_transform(X_60)
+pca = PCA()
+pca.fit(X_n)
 
-pca_6 = PCA(6)
-X_6 = pca_6.fit_transform(X_n)
-app_6 = pca_6.inverse_transform(X_6)
 
-pca_2 = PCA(2)
-X_2 = pca_2.fit_transform(X_n)
-app_2 = pca_2.inverse_transform(X_2)
+# # # extract 60 PCA
+# pca = PCA(60)
+# X_60 = pca_60.fit_transform(X_n)
+# app_60 = pca_60.inverse_transform(X_60)
 
-pca_l6 = PCA(154587)
-X_l6 = np.transpose(pca_l6.fit_transform(X_n)[-6:])
-app_l6 = pca_l6.inverse_transform(X_l6)
+# # #extract 6 PCA
+# pca_6 = PCA(6)
+# X_6 = pca_6.fit_transform(X_n)
+# app_6 = pca_6.inverse_transform(X_6)
 
+# # #extract 2 PCA
+# pca_2 = PCA(2)
+# X_2 = pca_2.fit_transform(X_n)
+# app_2 = pca_2.inverse_transform(X_2)
+
+# p = PCA(154587)
+# XNN = p.fit_transform(X_n)
+# extract last 6 PCA
+# L = np.dot(X_n, X_n.T)
+# eig_vals, eig_vecs = np.linalg.eig(L)
+# tmp = np.dot(X_n.T,eig_vecs).T
+# V = tmp[::-1] #reverse since last eigenvectors are the ones we want
+# S = np.sqrt(eig_vals)[::-1]
+# for i in range(V.shape[1]):
+#     V[:,i] /= S
+
+# eig_pairs = [(np.abs(eig_vals[i]), eig_vecs[:,i]) for i in range(len(eig_vals))]
+# # Sort the (eigenvalue, eigenvector) tuples from high to low
+# eig_pairs.sort()
+# eig_pairs.reverse()
+
+# print('Eigenvalues in descending order:')
+# for i in eig_pairs:
+#     print(i[0])
+
+# matrix_w = np.hstack((eig_pairs[0][1].reshape(1087,1),
+#                       eig_pairs[1][1].reshape(1087,1)))
+# Y = X_n.T.dot(matrix_w)
+
+# pca_l6 = PCA(154587)
+# X_l6 = np.transpose(pca_l6.fit_transform(X_n)[-6:])
+# app_l6 = pca_l6.inverse_transform(X_l6)
+
+# Create the figure and set id of the image
 plt.figure(figsize=(8, 4))
-image_id = 1000
+image_id = 1010
 
-# Original Image
+X_t = pca.transform(X_n)
+
+# Plot Original Image
 plt.subplot(1, 5, 1)
-orig = scaler.inverse_transform(X_n).astype(np.uint8)
+orig = st.undo(X_n).astype(np.uint8)
 plt.imshow(orig[image_id].reshape(227, 227, 3))
 plt.title('Original Image', fontsize=20)
 
-# 60PC Image
+# Plot 60PC Image
 plt.subplot(1, 5, 2)
-orig = scaler.inverse_transform(app_60).astype(np.uint8)
+nComp = 60
+X_b = np.dot(X_t[:, :nComp], pca.components_[:nComp, :])
+orig = st.undo(X_b).astype(np.uint8)
 plt.imshow(orig[image_id].reshape(227, 227, 3))
 plt.title('60PC', fontsize=20)
 
-# 6PC Image
+# Plot 6PC Image
 plt.subplot(1, 5, 3)
-orig = scaler.inverse_transform(app_6).astype(np.uint8)
+nComp = 6
+X_b = np.dot(X_t[:, :nComp], pca.components_[:nComp, :])
+orig = st.undo(X_b).astype(np.uint8)
 plt.imshow(orig[image_id].reshape(227, 227, 3))
 plt.title('6PC', fontsize=20)
 
-# 2PC Image
+# Plot 2PC Image
 plt.subplot(1, 5, 4)
-orig = scaler.inverse_transform(app_2).astype(np.uint8)
+nComp = 2
+X_b = np.dot(X_t[:, :nComp], pca.components_[:nComp, :])
+orig = st.undo(X_b).astype(np.uint8)
 plt.imshow(orig[image_id].reshape(227, 227, 3))
 plt.title('2PC', fontsize=20)
 
-# Last 6PC Image
+# Plot Last 6PC Image
 plt.subplot(1, 5, 5)
-orig = scaler.inverse_transform(app_l6).astype(np.uint8)
+nComp = 6
+X_b = np.dot(X_t[:, :nComp], pca.components_[:nComp, :])
+orig = st.undo(X_b).astype(np.uint8)
 plt.imshow(orig[image_id].reshape(227, 227, 3))
-plt.title('2PC', fontsize=20)
+plt.title('Last 6PC', fontsize=20)
 
 # plt.scatter(X_red[:, 10], X_red[:, 11], c=y)
 plt.show()
