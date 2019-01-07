@@ -5,7 +5,6 @@ import os
 
 
 def gen_matrix(path_dir):
-
     o_dog = [np.empty((0, 154587)), np.empty((0, 1))]
     o_guitar = [np.empty((0, 154587)), np.empty((0, 1))]
     o_house = [np.empty((0, 154587)), np.empty((0, 1))]
@@ -13,13 +12,13 @@ def gen_matrix(path_dir):
 
     threads = [
         threading.Thread(target=add_data_to_matrix,
-                         args=(o_dog, path_dir, "dog", "red")),
+                         args=(o_dog, path_dir, "dog", 0)),
         threading.Thread(target=add_data_to_matrix,
-                         args=(o_guitar, path_dir, "guitar", "yellow")),
+                         args=(o_guitar, path_dir, "guitar", 1)),
         threading.Thread(target=add_data_to_matrix,
-                         args=(o_house, path_dir, "house", "blue")),
+                         args=(o_house, path_dir, "house", 2)),
         threading.Thread(target=add_data_to_matrix,
-                         args=(o_person, path_dir, "person", "green"))
+                         args=(o_person, path_dir, "person", 3))
     ]
 
     for t in threads:
@@ -27,7 +26,7 @@ def gen_matrix(path_dir):
     for t in threads:
         t.join()
     X = np.vstack((o_dog[0], o_guitar[0], o_house[0], o_person[0]))
-    y = np.vstack((o_dog[1], o_guitar[1], o_house[1], o_person[1]))
+    y = np.vstack((o_dog[1], o_guitar[1], o_house[1], o_person[1])).ravel()
     np.save(path_dir + "data.npy", X)
     np.save(path_dir + "label.npy", y)
     return X, y
@@ -40,6 +39,7 @@ def load_matrix(path_data, path_label):
 
 
 def add_data_to_matrix(list, PACS_dir, folder_name, color):
+    print('Loading ' + folder_name + '...')
     path_dir = PACS_dir + folder_name
     directory = os.fsencode(path_dir)
     lst = os.listdir(directory)
@@ -50,7 +50,8 @@ def add_data_to_matrix(list, PACS_dir, folder_name, color):
             img_data = np.asarray(Image.open(os.path.join(path_dir, filename)))
             list[0] = np.vstack((list[0], img_data.ravel()))
             list[1] = np.vstack((list[1], color))
-            print(filename)
+            # print(filename)
             continue
         else:
             continue
+    print(folder_name + ' loaded correctly!')
