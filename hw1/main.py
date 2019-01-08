@@ -10,19 +10,16 @@ import matplotlib
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 
-from standardize import Standardize
 import PACS_loading as PACS
 
 
-def show_scatterplot(ax,firstPC, secondPC, X, y, data, color, str_x, str_y):
-    for i in range(0,4):
-        ax.scatter(X[y==i, firstPC], X[y==i, secondPC], c=color[i], label=data[i], s=10)
-    ax.set_xlabel(str_x)
-    ax.set_ylabel(str_y)
-    ax.legend()
-    ax.grid(True)
-
-    
+def show_scatterplot(axs, firstPC, secondPC, X, y, data, color, str_x, str_y):
+    for i in range(0, 4):
+        axs.scatter(X[y == i, firstPC], X[y == i, secondPC], c=color[i], label=data[i], s=10)
+    axs.set_xlabel(str_x)
+    axs.set_ylabel(str_y)
+    axs.legend()
+    axs.grid(True)
 
 
 def pca_custom(X):
@@ -82,8 +79,8 @@ else:
 
     exit(-1)
 
-legend_data = ["Dog","Guitar","House","Person"]
-legend_color = ["red","blue","green","orange"]
+legend_data = ["Dog", "Guitar", "House", "Person"]
+legend_color = ["red", "blue", "green", "orange"]
 
 # 1.2 PRINCIPAL COMPONENT VISUALIZATION
 
@@ -94,8 +91,8 @@ X_n = st.transform(X)
 pca = PCA()
 pca.fit(X_n)
 
-#TODO: Remove
-#V,S,mean = pca_custom(X_n)
+# TODO: Remove
+# V,S,mean = pca_custom(X_n)
 # cov_mat = np.cov(X_n)
 # eig_vals, eig_vecs = np.linalg.eig(cov_mat)
 
@@ -116,25 +113,25 @@ ax.set_title('Original Image', fontsize=16)
 ax = fig.add_subplot(1, 5, 2)
 X_60pc = reconstruction(X_t, st, 500)
 ax.imshow(X_60pc[image_id].reshape(227, 227, 3), vmin=0, vmax=1)
-ax.set_title('60PC var: %d%%' % (np.sum(pca.explained_variance_ratio_[:500])*100), fontsize=16)
+ax.set_title('60PC var: %d%%' % (np.sum(pca.explained_variance_ratio_[:500]) * 100), fontsize=16)
 
 # Plot 6PC Image
 ax = fig.add_subplot(1, 5, 3)
 X_6pc = reconstruction(X_t, st, 6)
 ax.imshow(X_6pc[image_id].reshape(227, 227, 3), vmin=0, vmax=1)
-ax.set_title('6PCvar: %d%%' % (np.sum(pca.explained_variance_ratio_[:6])*100), fontsize=16)
+ax.set_title('6PCvar: %d%%' % (np.sum(pca.explained_variance_ratio_[:6]) * 100), fontsize=16)
 
 # Plot 2PC Image
 ax = fig.add_subplot(1, 5, 4)
 X_2pc = reconstruction(X_t, st, 2)
 ax.imshow(X_2pc[image_id].reshape(227, 227, 3), vmin=0, vmax=1)
-ax.set_title('2PCvar: %d%%' % (np.sum(pca.explained_variance_ratio_[:2])*100), fontsize=16)
+ax.set_title('2PCvar: %d%%' % (np.sum(pca.explained_variance_ratio_[:2]) * 100), fontsize=16)
 
 # Plot Last 6PC Image
 ax = fig.add_subplot(1, 5, 5)
 X_l6pc = reconstruction(X_t, st, -6)
 ax.imshow(X_l6pc[image_id].reshape(227, 227, 3), vmin=0, vmax=1)
-ax.set_title('Last 6PC var: %d%%' % (np.sum(pca.explained_variance_ratio_[-6:])*100), fontsize=16)
+ax.set_title('Last 6PC var: %d%%' % (np.sum(pca.explained_variance_ratio_[-6:]) * 100), fontsize=16)
 fig.show()
 
 # Print Scatterplots
@@ -142,16 +139,16 @@ fig.show()
 fig = plt.figure()
 
 fig.suptitle("Projection on different PC", fontsize=16)
-ax = fig.add_subplot(2,2,1)
-show_scatterplot(ax,0,1, X_t, y,  legend_data, legend_color, '1° PC', '2°PC')
-ax = fig.add_subplot(2,2,2)
-show_scatterplot(ax,2,3, X_t, y,  legend_data, legend_color, '3° PC', '4°PC')
-ax = fig.add_subplot(2,2,3)
-show_scatterplot(ax,9,11, X_t, y,  legend_data, legend_color, '10° PC', '11°PC')
+ax = fig.add_subplot(2, 2, 1)
+show_scatterplot(ax, 0, 1, X_t, y, legend_data, legend_color, '1° PC', '2°PC')
+ax = fig.add_subplot(2, 2, 2)
+show_scatterplot(ax, 2, 3, X_t, y, legend_data, legend_color, '3° PC', '4°PC')
+ax = fig.add_subplot(2, 2, 3)
+show_scatterplot(ax, 9, 11, X_t, y, legend_data, legend_color, '10° PC', '11°PC')
 
-ax = fig.add_subplot(2,2,4, projection='3d')
-for i in range(0,4):
-    ax.scatter(X_t[y==i, 0], X_t[y==i, 1], X_t[y==i, 2], c=legend_color[i], label=legend_data[i], s=10)
+ax = fig.add_subplot(2, 2, 4, projection='3d')
+for i in range(0, 4):
+    ax.scatter(X_t[y == i, 0], X_t[y == i, 1], X_t[y == i, 2], c=legend_color[i], label=legend_data[i], s=10)
 ax.set_xlabel('1° PC')
 ax.set_ylabel('2° PC')
 ax.set_zlabel('3° PC')
@@ -167,23 +164,21 @@ cum_var_exp = np.cumsum(var_exp)
 ind = np.arange(len(var_exp))  # the x locations for the groups
 width = 0.5  # the width of the bars
 fig = plt.figure()
-ax = fig.add_subplot(1,1,1)
-ax.bar(ind - width/2, var_exp, width, color='SkyBlue', label='Explained Variance')
-ax.scatter(ind + width/2, cum_var_exp, width, color='IndianRed', label='Cumulative Explained Variance')
+ax = fig.add_subplot(1, 1, 1)
+ax.bar(ind - width / 2, var_exp, width, color='SkyBlue', label='Explained Variance')
+ax.scatter(ind + width / 2, cum_var_exp, width, color='IndianRed', label='Cumulative Explained Variance')
 ax.legend()
 ax.grid(True)
 fig.show()
-
-
 
 x_train, x_test, y_train, y_test = train_test_split(X, y)
 clf = GaussianNB()
 clf.fit(x_train, y_train)
 y_pred = clf.predict(x_test)
-print("Original accuracy over (%d points): %d%%" % (x_test.shape[0],((y_test.shape[0]-(y_test != y_pred).sum())*100/y_test.shape[0])))
+print("Original accuracy over (%d points): %d%%" % (
+x_test.shape[0], ((y_test.shape[0] - (y_test != y_pred).sum()) * 100 / y_test.shape[0])))
 
-
-x_train, x_test, y_train, y_test = train_test_split(X_t[:,0:2], y)
+x_train, x_test, y_train, y_test = train_test_split(X_t[:, 0:2], y)
 clf = GaussianNB()
 eclf = VotingClassifier(estimators=[('GaussianNB', clf)],
                         voting='soft')
@@ -196,24 +191,25 @@ xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.5),
                      np.arange(y_min, y_max, 0.5))
 
 fig = plt.figure()
-axarr = fig.add_subplot(1,1,1)
+axarr = fig.add_subplot(1, 1, 1)
 Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
 Z = Z.reshape(xx.shape)
 
-
-norm = matplotlib.colors.Normalize(vmin=0,vmax=3)
+norm = matplotlib.colors.Normalize(vmin=0, vmax=3)
 cmap_plot = matplotlib.colors.ListedColormap(legend_color)
 
-axarr.contourf(xx, yy, Z, alpha=0.5, norm=norm,cmap=cmap_plot)
-for i in range(0,4):
-    axarr.scatter(X_t[y==i, 0], X_t[y==i, 1], c=legend_color[i], label=legend_data[i], s=20)
-axarr.set_title("1° and 2° PC accuracy over (%d points): %d%%" % (x_test.shape[0],((y_test.shape[0]-(y_test != y_pred).sum())*100/y_test.shape[0])))
+axarr.contourf(xx, yy, Z, alpha=0.5, norm=norm, cmap=cmap_plot)
+for i in range(0, 4):
+    axarr.scatter(X_t[y == i, 0], X_t[y == i, 1], c=legend_color[i], label=legend_data[i], s=20)
+axarr.set_title("1° and 2° PC accuracy over (%d points): %d%%" % (
+x_test.shape[0], ((y_test.shape[0] - (y_test != y_pred).sum()) * 100 / y_test.shape[0])))
 axarr.legend()
 fig.show()
 
-print("1° and 2° PC accuracy over (%d points): %d%%" % (x_test.shape[0],((y_test.shape[0]-(y_test != y_pred).sum())*100/y_test.shape[0])))
+print("1° and 2° PC accuracy over (%d points): %d%%" % (
+x_test.shape[0], ((y_test.shape[0] - (y_test != y_pred).sum()) * 100 / y_test.shape[0])))
 
-x_train, x_test, y_train, y_test = train_test_split(X_t[:,2:4], y)
+x_train, x_test, y_train, y_test = train_test_split(X_t[:, 2:4], y)
 clf = GaussianNB()
 clf.fit(x_train, y_train)
 y_pred = clf.predict(x_test)
@@ -225,14 +221,15 @@ xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.5),
                      np.arange(y_min, y_max, 0.5))
 
 fig = plt.figure()
-axarr = fig.add_subplot(1,1,1)
+axarr = fig.add_subplot(1, 1, 1)
 Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
 Z = Z.reshape(xx.shape)
 
-axarr.contourf(xx, yy, Z, alpha=0.5, norm=norm,cmap=cmap_plot)
-for i in range(0,4):
-    axarr.scatter(X_t[y==i, 2], X_t[y==i, 3], c=legend_color[i], label=legend_data[i], s=20)
-axarr.set_title("3° and 4° PC accuracy over (%d points): %d%%" % (x_test.shape[0],((y_test.shape[0]-(y_test != y_pred).sum())*100/y_test.shape[0])))
+axarr.contourf(xx, yy, Z, alpha=0.5, norm=norm, cmap=cmap_plot)
+for i in range(0, 4):
+    axarr.scatter(X_t[y == i, 2], X_t[y == i, 3], c=legend_color[i], label=legend_data[i], s=20)
+axarr.set_title("3° and 4° PC accuracy over (%d points): %d%%" % (
+x_test.shape[0], ((y_test.shape[0] - (y_test != y_pred).sum()) * 100 / y_test.shape[0])))
 axarr.legend()
 fig.show()
 
