@@ -12,11 +12,13 @@ import matplotlib.pyplot as plt
 
 import PACS_loading as PACS
 
+r_state = 1
 
 
 def show_scatterplot(axs, firstPC, secondPC, X, y, data, color, str_x, str_y):
     for i in range(0, 4):
-        axs.scatter(X[y == i, firstPC], X[y == i, secondPC], c=color[i], label=data[i], s=10)
+        axs.scatter(X[y == i, firstPC], X[y == i, secondPC],
+                    c=color[i], label=data[i], s=10)
     axs.set_xlabel(str_x)
     axs.set_ylabel(str_y)
     axs.legend()
@@ -114,25 +116,29 @@ ax.set_title('Original Image', fontsize=16)
 ax = fig.add_subplot(1, 5, 2)
 X_60pc = reconstruction(X_t, st, 500)
 ax.imshow(X_60pc[image_id].reshape(227, 227, 3), vmin=0, vmax=1)
-ax.set_title('60PC var: %d%%' % (np.sum(pca.explained_variance_ratio_[:500]) * 100), fontsize=16)
+ax.set_title('60PC var: %d%%' %
+             (np.sum(pca.explained_variance_ratio_[:500]) * 100), fontsize=16)
 
 # Plot 6PC Image
 ax = fig.add_subplot(1, 5, 3)
 X_6pc = reconstruction(X_t, st, 6)
 ax.imshow(X_6pc[image_id].reshape(227, 227, 3), vmin=0, vmax=1)
-ax.set_title('6PCvar: %d%%' % (np.sum(pca.explained_variance_ratio_[:6]) * 100), fontsize=16)
+ax.set_title('6PCvar: %d%%' %
+             (np.sum(pca.explained_variance_ratio_[:6]) * 100), fontsize=16)
 
 # Plot 2PC Image
 ax = fig.add_subplot(1, 5, 4)
 X_2pc = reconstruction(X_t, st, 2)
 ax.imshow(X_2pc[image_id].reshape(227, 227, 3), vmin=0, vmax=1)
-ax.set_title('2PCvar: %d%%' % (np.sum(pca.explained_variance_ratio_[:2]) * 100), fontsize=16)
+ax.set_title('2PCvar: %d%%' %
+             (np.sum(pca.explained_variance_ratio_[:2]) * 100), fontsize=16)
 
 # Plot Last 6PC Image
 ax = fig.add_subplot(1, 5, 5)
 X_l6pc = reconstruction(X_t, st, -6)
 ax.imshow(X_l6pc[image_id].reshape(227, 227, 3), vmin=0, vmax=1)
-ax.set_title('Last 6PC var: %d%%' % (np.sum(pca.explained_variance_ratio_[-6:]) * 100), fontsize=16)
+ax.set_title('Last 6PC var: %d%%' %
+             (np.sum(pca.explained_variance_ratio_[-6:]) * 100), fontsize=16)
 fig.show()
 
 # Print Scatterplots
@@ -145,11 +151,13 @@ show_scatterplot(ax, 0, 1, X_t, y, legend_data, legend_color, '1° PC', '2°PC')
 ax = fig.add_subplot(2, 2, 2)
 show_scatterplot(ax, 2, 3, X_t, y, legend_data, legend_color, '3° PC', '4°PC')
 ax = fig.add_subplot(2, 2, 3)
-show_scatterplot(ax, 9, 11, X_t, y, legend_data, legend_color, '10° PC', '11°PC')
+show_scatterplot(ax, 9, 11, X_t, y, legend_data,
+                 legend_color, '10° PC', '11°PC')
 
 ax = fig.add_subplot(2, 2, 4, projection='3d')
 for i in range(0, 4):
-    ax.scatter(X_t[y == i, 0], X_t[y == i, 1], X_t[y == i, 2], c=legend_color[i], label=legend_data[i], s=10)
+    ax.scatter(X_t[y == i, 0], X_t[y == i, 1], X_t[y == i, 2],
+               c=legend_color[i], label=legend_data[i], s=10)
 ax.set_xlabel('1° PC')
 ax.set_ylabel('2° PC')
 ax.set_zlabel('3° PC')
@@ -166,20 +174,22 @@ ind = np.arange(len(var_exp))  # the x locations for the groups
 width = 0.5  # the width of the bars
 fig = plt.figure()
 ax = fig.add_subplot(1, 1, 1)
-ax.bar(ind - width / 2, var_exp, width, color='SkyBlue', label='Explained Variance')
-ax.scatter(ind + width / 2, cum_var_exp, width, color='IndianRed', label='Cumulative Explained Variance')
+ax.bar(ind - width / 2, var_exp, width,
+       color='SkyBlue', label='Explained Variance')
+ax.scatter(ind + width / 2, cum_var_exp, width, color='IndianRed',
+           label='Cumulative Explained Variance')
 ax.legend()
 ax.grid(True)
 fig.show()
 
-x_train, x_test, y_train, y_test = train_test_split(X, y)
+x_train, x_test, y_train, y_test = train_test_split(X, y, random_state=r_state)
 clf = GaussianNB()
 clf.fit(x_train, y_train)
 y_pred = clf.predict(x_test)
-print("Original accuracy over (%d points): %d%%" % (
-x_test.shape[0], ((y_test.shape[0] - (y_test != y_pred).sum()) * 100 / y_test.shape[0])))
+print("Original accuracy over (%d points): %2.3f" % (
+    x_test.shape[0], clf.score(x_test, y_test)))
 
-x_train, x_test, y_train, y_test = train_test_split(X_t[:, 0:2], y)
+x_train, x_test, y_train, y_test = train_test_split(X_t[:, 0:2], y, random_state=r_state)
 clf = GaussianNB()
 eclf = VotingClassifier(estimators=[('GaussianNB', clf)],
                         voting='soft')
@@ -202,15 +212,15 @@ cmap_plot = matplotlib.colors.ListedColormap(legend_color)
 axarr.contourf(xx, yy, Z, alpha=0.5, norm=norm, cmap=cmap_plot)
 for i in range(0, 4):
     axarr.scatter(X_t[y == i, 0], X_t[y == i, 1], c=legend_color[i], label=legend_data[i], s=20)
-axarr.set_title("1° and 2° PC accuracy over (%d points): %d%%" % (
-x_test.shape[0], ((y_test.shape[0] - (y_test != y_pred).sum()) * 100 / y_test.shape[0])))
+axarr.set_title("1° and 2° PC accuracy over (%d points): %2.3f" % (
+x_test.shape[0], clf.score(x_test, y_test)))
 axarr.legend()
 fig.show()
 
-print("1° and 2° PC accuracy over (%d points): %d%%" % (
-x_test.shape[0], ((y_test.shape[0] - (y_test != y_pred).sum()) * 100 / y_test.shape[0])))
+print("1° and 2° PC accuracy over (%d points): %2.3f" % (
+x_test.shape[0], clf.score(x_test, y_test)))
 
-x_train, x_test, y_train, y_test = train_test_split(X_t[:, 2:4], y)
+x_train, x_test, y_train, y_test = train_test_split(X_t[:, 2:4], y, random_state=r_state)
 clf = GaussianNB()
 clf.fit(x_train, y_train)
 y_pred = clf.predict(x_test)
@@ -228,9 +238,10 @@ Z = Z.reshape(xx.shape)
 
 axarr.contourf(xx, yy, Z, alpha=0.5, norm=norm, cmap=cmap_plot)
 for i in range(0, 4):
-    axarr.scatter(X_t[y == i, 2], X_t[y == i, 3], c=legend_color[i], label=legend_data[i], s=20)
-axarr.set_title("3° and 4° PC accuracy over (%d points): %d%%" % (
-x_test.shape[0], ((y_test.shape[0] - (y_test != y_pred).sum()) * 100 / y_test.shape[0])))
+    axarr.scatter(X_t[y == i, 2], X_t[y == i, 3],
+                  c=legend_color[i], label=legend_data[i], s=20)
+axarr.set_title("3° and 4° PC accuracy over (%d points): %2.3f" % (
+    x_test.shape[0], clf.score(x_test, y_test)))
 axarr.legend()
 fig.show()
 
