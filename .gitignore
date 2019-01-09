@@ -9,6 +9,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 .vscode
+.idea
 hw1/PACS_homework
 build/
 develop-eggs/
