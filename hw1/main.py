@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 import PACS_loading as PACS
 
 
+
 def show_scatterplot(axs, firstPC, secondPC, X, y, data, color, str_x, str_y):
     for i in range(0, 4):
         axs.scatter(X[y == i, firstPC], X[y == i, secondPC], c=color[i], label=data[i], s=10)
