@@ -25,22 +25,22 @@ def gen_matrix(path_dir):
         t.start()
     for t in threads:
         t.join()
-    X = np.vstack((o_dog[0], o_guitar[0], o_house[0], o_person[0]))
+    x = np.vstack((o_dog[0], o_guitar[0], o_house[0], o_person[0]))
     y = np.vstack((o_dog[1], o_guitar[1], o_house[1], o_person[1])).ravel()
-    np.save(path_dir + "data.npy", X)
+    np.save(path_dir + "data.npy", x)
     np.save(path_dir + "label.npy", y)
-    return X, y
+    return x, y
 
 
 def load_matrix(path_data, path_label):
-    X = np.load(path_data)
+    x = np.load(path_data)
     y = np.load(path_label)
-    return X, y
+    return x, y
 
 
-def add_data_to_matrix(list, PACS_dir, folder_name, color):
+def add_data_to_matrix(list_to_fill, pacs_dir, folder_name, color):
     print('Loading ' + folder_name + '...')
-    path_dir = PACS_dir + folder_name
+    path_dir = pacs_dir + folder_name
     directory = os.fsencode(path_dir)
     lst = os.listdir(directory)
     lst.sort()
@@ -48,8 +48,8 @@ def add_data_to_matrix(list, PACS_dir, folder_name, color):
         filename = os.fsdecode(file)
         if filename.endswith(".jpg"):
             img_data = np.asarray(Image.open(os.path.join(path_dir, filename)))
-            list[0] = np.vstack((list[0], img_data.ravel()))
-            list[1] = np.vstack((list[1], color))
+            list_to_fill[0] = np.vstack((list_to_fill[0], img_data.ravel()))
+            list_to_fill[1] = np.vstack((list_to_fill[1], color))
             # print(filename)
             continue
         else:
