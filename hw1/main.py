@@ -1,5 +1,5 @@
 """
-Homework 1 Script
+Homework 1 Code
 Author: Piero Macaluso s252894
 
 Course: Machine Learning and Artificial Intelligence
@@ -226,20 +226,20 @@ def plot_decision_boundaries_gnb(x_t, y, r_s, r_e, x_train, y_train, x_test, y_t
 
 def main():
     # 1.1 DATA PREPARATION
-    if sys.argv[1] == '-s' and len(sys.argv) == 3:
+    if len(sys.argv) == 3 and sys.argv[1] == '-s':
         x, y = gen_matrix(sys.argv[2], True)
-    if sys.argv[1] == '-n' and len(sys.argv) == 3:
+    elif len(sys.argv) == 3 and sys.argv[1] == '-n':
         x, y = gen_matrix(sys.argv[2], False)
-    elif sys.argv[1] == '-l' and len(sys.argv) == 4:
+    elif len(sys.argv) == 4 and sys.argv[1] == '-l':
         x, y = load_matrix(sys.argv[2], sys.argv[3])
     else:
         print("Usage:")
-        print("- python main.py -n <PACS_homework folder>")
+        print("$ python main.py -n <PACS_homework folder>")
         print("-- Loads Image from the specified Folder and execute the code")
-        print("- python main.py -s <PACS_homework folder>")
+        print("$ python main.py -s <PACS_homework folder>")
         print("-- Loads Image from the specified Folder and save files in data.npy and label.npy before executing the "
               "code")
-        print("- python main.py -l <data.npy file> <label.npy file>")
+        print("$ python main.py -l <data.npy file> <label.npy file>")
         print("-- Loads Image from data.npy and label.npy files and execute the code")
         exit(-1)
 
@@ -258,7 +258,7 @@ def main():
     plt.tight_layout()
     # FIG1: Re-projections of image
     fig, ax = plt.subplots(2, 3)
-    image_id = 0        # Dog example
+    image_id = 0  # Dog example
     # image_id = 189    # Guitar example
     # image_id = 375    # House example
     # image_id = 677    # Person example
@@ -280,7 +280,7 @@ def main():
     show_reconstruction(ax[1][1], x_t, st, pca, -6, image_id)
     ax[1][2].axis('off')
     plt.rcParams["figure.figsize"][0] = 6.25
-    #plt.savefig("report/img/fig01d.png", transparent=False, dpi=300, bbox_inches="tight")
+    # plt.savefig("report/img/fig01d.png", transparent=False, dpi=300, bbox_inches="tight")
     fig.show()
 
     # FIG 2: Scatterplots
