@@ -14,6 +14,7 @@ from sklearn.model_selection import KFold
 from mpl_toolkits.mplot3d import Axes3D
 from sklearn import svm, datasets
 import pandas as pd
+import matplotlib
 from IPython.display import display, HTML
 
 # TODO: Change this to 252894 to obtain results of the report
@@ -57,7 +58,22 @@ def plot_contours(ax, clf, xx, yy, **params):
     return out
 
 
+def plot_data(ax, x, y, xx, yy, clf):
+    label = ("setosa", "versicolor", "virginica")
+    color = ["red", "blue", "green"]
+    norm = matplotlib.colors.Normalize(vmin=0, vmax=2)
+    cmap_plot = matplotlib.colors.ListedColormap(color)
+    for j in range(0, 3):
+        ax.scatter(x[y == j, 0], x[y == j, 1], c=color[j], label=label[j], s=20, edgecolors='k')
+    plot_contours(ax, clf, xx, yy, norm=norm, cmap=cmap_plot, alpha=0.5)
+
+
 def main():
+    legend_data = ("setosa", "versicolor", "virginica")
+    legend_color = ["red", "blue", "green"]
+    norm = matplotlib.colors.Normalize(vmin=0, vmax=2)
+    cmap_plot = matplotlib.colors.ListedColormap(legend_color)
+
     # Section 1
     (x, y) = datasets.load_iris(return_X_y=True)
     x = x[:, :2]  # we only take the first two features. Skip PCA
@@ -65,7 +81,8 @@ def main():
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.5, random_state=r_state)
     x_test, x_val, y_test, y_val = train_test_split(x_test, y_test, test_size=0.4, random_state=r_state)
 
-    fig = plt.figure()  # 1
+    # Fig01a
+    fig = plt.figure(figsize=(8, 12))
     acc = np.empty(7)
     c = 1e-3
     c_best = 1e-3
@@ -74,33 +91,33 @@ def main():
     xx, yy = make_meshgrid(x[:, 0], x[:, 1])
     while c <= 1e3:
         clf = svm.LinearSVC(C=c, random_state=r_state)
-        acc[i - 1] = clf.fit(x_train, y_train).score(x_val, y_val)
+        acc[i - 1] = clf.fit(x_train, y_train).score(x_val, y_val) * 100
         if acc[i - 1] > a_best:
             c_best = c
             a_best = acc[i - 1]
-        ax = fig.add_subplot(3, 3, i)
-        plot_contours(ax, clf, xx, yy, cmap=plt.get_cmap("coolwarm"), alpha=0.8)
-        ax.scatter(x_train[:, 0], x_train[:, 1], c=y_train,
-                   cmap=plt.get_cmap("coolwarm"), s=20, edgecolors='k')
+        ax = fig.add_subplot(4, 2, i)
+        plot_data(ax, x_train, y_train, xx, yy, clf)
         ax.set_xlim(xx.min(), xx.max())
         ax.set_ylim(yy.min(), yy.max())
         ax.set_xlabel('Sepal length')
         ax.set_ylabel('Sepal width')
         ax.set_xticks(())
         ax.set_yticks(())
-        ax.set_title('C=%2.2E A=%.2f ' % (c, acc[i - 1]))
+        ax.legend()
+        ax.set_title('C=%2.2E A=%2.1f%% ' % (c, acc[i - 1]))
 
         c = c * 10
         i = i + 1
-    fig.suptitle("Linear SVM - C tuning - C_best = %2.2E A_best = %2.2f" %
+    fig.suptitle("Linear SVM - C tuning - C_best = %2.2E A_best = %2.1f%%" %
                  (c_best, a_best), fontsize=14, fontweight='bold')
-    plt.rcParams["figure.figsize"][0] = 6.25
-    plt.savefig("report/img/fig01d.png", transparent=False, dpi=300, bbox_inches="tight")
+
+    plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0, rect=[0, 0.03, 1, 0.95])
+    plt.savefig("report/img/fig01a.png", transparent=False, dpi=300)
     fig.show()
 
-    # TODO: Add value on top of bar
-    fig = plt.figure()  # 2
-    fig.suptitle("Linear SVM - C tuning - C_best = %2.2E A_best = %2.2f" %
+    # fig01b
+    fig = plt.figure(figsize=(7, 5))
+    fig.suptitle("Linear SVM - C tuning - C_best = %2.2E A_best = %2.2f%%" %
                  (c_best, a_best), fontsize=14, fontweight='bold')
     ax = fig.add_subplot(1, 1, 1)
     V = np.array(['1e-3', '1e-2', '1e-1', '1e0', '1e1', '1e2', '1e3'])
@@ -108,26 +125,30 @@ def main():
     ax.set_xlabel('C')
     ax.set_ylabel('Accuracy %')
     plt.grid(True)
+    ax.set_yticks(acc)
+    plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0, rect=[0, 0.03, 1, 0.95])
+    plt.savefig("report/img/fig01b.png", transparent=False, dpi=300)
     fig.show()
 
     fig = plt.figure()  # 3
     ax = fig.add_subplot(1, 1, 1)
 
-    # https://www.quora.com/What-is-the-purpose-for-using-slack-variable-in-SVM
-    fig.suptitle("Linear SVM with validation accuracy of %2.2f" %
+    # fig01c
+    fig.suptitle("Linear SVM with validation accuracy of %2.2f%%" %
                  a_best, fontsize=14, fontweight='bold')
     clf = svm.LinearSVC(C=c_best, random_state=r_state)
-    a = clf.fit(x_train, y_train).score(x_test, y_test)
-    plot_contours(ax, clf, xx, yy, cmap=plt.get_cmap("coolwarm"), alpha=0.8)
-    ax.scatter(x_test[:, 0], x_test[:, 1], c=y_test,
-               cmap=plt.get_cmap("coolwarm"), s=20, edgecolors='k')
+    a = clf.fit(x_train, y_train).score(x_test, y_test)*100
+    plot_data(ax, x_test, y_test, xx, yy, clf)
     ax.set_xlim(xx.min(), xx.max())
     ax.set_ylim(yy.min(), yy.max())
     ax.set_xlabel('Sepal length')
     ax.set_ylabel('Sepal width')
     ax.set_xticks(())
     ax.set_yticks(())
-    ax.set_title('C=%2.2E A=%.2f ' % (c_best, a))
+    ax.legend()
+    ax.set_title('C=%2.2E A=%2.2f%% ' % (c_best, a))
+    plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0, rect=[0, 0.03, 1, 0.95])
+    plt.savefig("report/img/fig01c.png", transparent=False, dpi=300)
     fig.show()
 
     fig = plt.figure()  # 4
