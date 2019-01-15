@@ -1,6 +1,6 @@
 #!/bin/bash
 
-/sbin/modprobe nvidia
+sudo /sbin/modprobe nvidia
 
 if [ "$?" -eq 0 ]; then
   # Count the number of NVIDIA controllers found.
