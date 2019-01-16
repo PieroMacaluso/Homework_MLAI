@@ -1,0 +1,63 @@
+[1,   195] loss: 3.625
+Accuracy of the network on the test set: 24 %
+Time elapsed: 0:00:32
+[2,   195] loss: 2.872
+Accuracy of the network on the test set: 30 %
+Time elapsed: 0:01:01
+[3,   195] loss: 2.503
+Accuracy of the network on the test set: 35 %
+Time elapsed: 0:01:30
+[4,   195] loss: 2.244
+Accuracy of the network on the test set: 37 %
+Time elapsed: 0:01:59
+[5,   195] loss: 2.030
+Accuracy of the network on the test set: 39 %
+Time elapsed: 0:02:28
+[6,   195] loss: 1.848
+Accuracy of the network on the test set: 40 %
+Time elapsed: 0:02:57
+[7,   195] loss: 1.674
+Accuracy of the network on the test set: 42 %
+Time elapsed: 0:03:26
+[8,   195] loss: 1.519
+Accuracy of the network on the test set: 42 %
+Time elapsed: 0:03:55
+[9,   195] loss: 1.348
+Accuracy of the network on the test set: 43 %
+Time elapsed: 0:04:24
+[10,   195] loss: 1.187
+Accuracy of the network on the test set: 43 %
+Time elapsed: 0:04:53
+[11,   195] loss: 1.039
+Accuracy of the network on the test set: 44 %
+Time elapsed: 0:05:22
+[12,   195] loss: 0.888
+Accuracy of the network on the test set: 44 %
+Time elapsed: 0:05:51
+[13,   195] loss: 0.751
+Accuracy of the network on the test set: 43 %
+Time elapsed: 0:06:20
+[14,   195] loss: 0.614
+Accuracy of the network on the test set: 44 %
+Time elapsed: 0:06:49
+[15,   195] loss: 0.501
+Accuracy of the network on the test set: 43 %
+Time elapsed: 0:07:18
+[16,   195] loss: 0.394
+Accuracy of the network on the test set: 43 %
+Time elapsed: 0:07:48
+[17,   195] loss: 0.309
+Accuracy of the network on the test set: 43 %
+Time elapsed: 0:08:17
+[18,   195] loss: 0.235
+Accuracy of the network on the test set: 43 %
+Time elapsed: 0:08:46
+[19,   195] loss: 0.178
+Accuracy of the network on the test set: 43 %
+Time elapsed: 0:09:15
+[20,   195] loss: 0.140
+Accuracy of the network on the test set: 43 %
+Time elapsed: 0:09:44
+Finished Training
+584
+0:09:44

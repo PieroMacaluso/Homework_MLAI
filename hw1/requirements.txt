@@ -1,4 +1,0 @@
-numpy==1.15.1
-matplotlib==2.2.3
-Pillow==5.4.1
-scikit_learn==0.20.2
