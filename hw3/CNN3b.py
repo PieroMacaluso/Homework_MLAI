@@ -135,29 +135,23 @@ class old_nn(nn.Module):
 class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()
-        self.conv1 = nn.Conv2d(3, 128, kernel_size=5, stride=2, padding=0)
-        self.conv1_bn = nn.BatchNorm2d(128)
-        self.conv2 = nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=0)
-        self.conv2_bn = nn.BatchNorm2d(128)
-        self.conv3 = nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=0)
-        self.conv3_bn = nn.BatchNorm2d(128)
+        self.conv1 = nn.Conv2d(3, 256, kernel_size=5, stride=2, padding=0)
+        self.conv2 = nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=0)
+        self.conv3 = nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=0)
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2, padding=0)
-        self.conv_final = nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=0)
-        self.conv_final_bn = nn.BatchNorm2d(256)
-        self.fc1 = nn.Linear(256 * 4 * 4, 4096)
+        self.conv_final = nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=0)
+        self.fc1 = nn.Linear(512 * 4 * 4, 4096)
         self.fc2 = nn.Linear(4096, n_classes)
 
     def forward(self, x):
-        x = F.relu(self.conv1_bn(self.conv1(x)))
-        x = F.relu(self.conv2_bn(self.conv2(x)))
-        x = F.relu(self.conv3_bn(self.conv3(x)))
-        x = F.relu(self.pool(self.conv_final_bn(self.conv_final(x))))
+        x = F.relu(self.conv1(x))
+        x = F.relu(self.conv2(x))
+        x = F.relu(self.conv3(x))
+        x = F.relu(self.pool(self.conv_final(x)))
         x = x.view(x.shape[0], -1)
         x = F.relu(self.fc1(x))
-        x = F.dropout2d(x, p=0.5)
         x = self.fc2(x)
         return x
-
 
 #### RUNNING CODE FROM HERE:
 
@@ -265,9 +259,10 @@ for epoch in range(n_epochs):  # loop over the dataset multiple times
     print("Time elapsed: " + str(datetime.timedelta(seconds=delta)))
 print('Finished Training')
 
-plot_with_epoch("fig04c.png", "Step 4/6 - CNN 128/128/128/256 BN + Dropout 0.5 + FC1 (4096)", accuracies, losses,
-                n_epochs)
+plot_with_epoch("fig03b.png", "Step 3/6 - Simple CNN 256/256/256/512", accuracies, losses, n_epochs)
+
 end = time.time()
 delta = int(end - start)
 print(delta)
 print(str(datetime.timedelta(seconds=delta)))
+

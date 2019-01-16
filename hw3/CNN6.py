@@ -136,30 +136,25 @@ class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()
         self.conv1 = nn.Conv2d(3, 128, kernel_size=5, stride=2, padding=0)
-        self.conv1_bn = nn.BatchNorm2d(128)
         self.conv2 = nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=0)
-        self.conv2_bn = nn.BatchNorm2d(128)
         self.conv3 = nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=0)
-        self.conv3_bn = nn.BatchNorm2d(128)
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2, padding=0)
         self.conv_final = nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=0)
-        self.conv_final_bn = nn.BatchNorm2d(256)
         self.fc1 = nn.Linear(256 * 4 * 4, 4096)
         self.fc2 = nn.Linear(4096, n_classes)
 
     def forward(self, x):
-        x = F.relu(self.conv1_bn(self.conv1(x)))
-        x = F.relu(self.conv2_bn(self.conv2(x)))
-        x = F.relu(self.conv3_bn(self.conv3(x)))
-        x = F.relu(self.pool(self.conv_final_bn(self.conv_final(x))))
+        x = F.relu(self.conv1(x))
+        x = F.relu(self.conv2(x))
+        x = F.relu(self.conv3(x))
+        x = F.relu(self.pool(self.conv_final(x)))
         x = x.view(x.shape[0], -1)
         x = F.relu(self.fc1(x))
-        x = F.dropout2d(x, p=0.5)
         x = self.fc2(x)
         return x
 
 
-#### RUNNING CODE FROM HERE:
+####RUNNING CODE FROM HERE:
 
 
 start = time.time()
@@ -167,16 +162,15 @@ start = time.time()
 # transform are heavily used to do simple and complex transformation and data augmentation
 transform_train = transforms.Compose(
     [
-        # transforms.RandomHorizontalFlip(),
-        transforms.Resize((32, 32)),
-        # transforms.RandomCrop(32),
+        transforms.RandomHorizontalFlip(),
+        transforms.Resize((224, 224)),
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
     ])
 
 transform_test = transforms.Compose(
     [
-        transforms.Resize((32, 32)),
+        transforms.Resize((224, 224)),
         transforms.ToTensor(),
         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
     ])
@@ -184,15 +178,14 @@ if torch.cuda.is_available():
     print("CUDA available")
 else:
     print("CUDA unavailable")
-    exit(-1)
 trainset = torchvision.datasets.CIFAR100(root='./data', train=True,
                                          download=True, transform=transform_train)
-trainloader = torch.utils.data.DataLoader(trainset, batch_size=256,
+trainloader = torch.utils.data.DataLoader(trainset, batch_size=128,
                                           shuffle=True, num_workers=4, drop_last=True)
 
 testset = torchvision.datasets.CIFAR100(root='./data', train=False,
                                         download=True, transform=transform_test)
-testloader = torch.utils.data.DataLoader(testset, batch_size=256,
+testloader = torch.utils.data.DataLoader(testset, batch_size=128,
                                          shuffle=False, num_workers=4, drop_last=True)
 
 dataiter = iter(trainloader)
@@ -203,21 +196,23 @@ dataiter = iter(trainloader)
 # imshow(torchvision.utils.make_grid(images))
 ####
 
+
 # create the old style NN network
 # net = old_nn()
 ###
 
-net = CNN()
+# net = CNN()
 ###
 # for Residual Network:
-# net = models.resnet18(pretrained=True)
-# net.fc = nn.Linear(512, n_classes)  # changing the fully connected layer of the already allocated network
+net = models.resnet18(pretrained=True)
+net.fc = nn.Linear(512, n_classes)  # changing the fully connected layer of the already allocated network
 ####
 
 ###OPTIONAL:
 # print("####plotting kernels of conv1 layer:####")
 # plot_kernel(net)
 ####
+
 
 net = net.cuda()
 
@@ -229,9 +224,11 @@ optimizer = optim.Adam(net.parameters(), lr=0.0001)  # better convergency w.r.t 
 # plot_kernel_output(net,images)
 ###
 
+# plot_with_epoch("fig01.png", "Step 1/6 - Old NN", range(1, 21), list(reversed(range(1, 21))), 20)
+
 ########TRAINING PHASE###########
 n_loss_print = len(trainloader)  # print every epoch, use smaller numbers if you wanna print loss more often!
-n_epochs = 20
+n_epochs = 10
 losses = np.empty(n_epochs)
 accuracies = np.empty(n_epochs)
 for epoch in range(n_epochs):  # loop over the dataset multiple times
@@ -265,8 +262,8 @@ for epoch in range(n_epochs):  # loop over the dataset multiple times
     print("Time elapsed: " + str(datetime.timedelta(seconds=delta)))
 print('Finished Training')
 
-plot_with_epoch("fig04c.png", "Step 4/6 - CNN 128/128/128/256 BN + Dropout 0.5 + FC1 (4096)", accuracies, losses,
-                n_epochs)
+plot_with_epoch("fig06.png", "Step 6/6 - ResNet18 pretrained with Random Horizontal Flip", accuracies, losses, n_epochs)
+
 end = time.time()
 delta = int(end - start)
 print(delta)
