@@ -1,3 +1,11 @@
+"""
+Homework 3 Code
+Author: Piero Macaluso s252894
+
+Course: Machine Learning and Artificial Intelligence
+Academic Year: 2018/2019
+University: Polytechnic University of Turin
+"""
 import sys
 
 
