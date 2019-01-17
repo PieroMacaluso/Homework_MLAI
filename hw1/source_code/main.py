@@ -280,7 +280,7 @@ def main():
     show_reconstruction(ax[1][1], x_t, st, pca, -6, image_id)
     ax[1][2].axis('off')
     plt.rcParams["figure.figsize"][0] = 6.25
-    # plt.savefig("report/img/fig01d.png", transparent=False, dpi=300, bbox_inches="tight")
+    # plt.savefig("../report/img/fig01d.png", transparent=False, bbox_inches="tight")
     fig.show()
 
     # FIG 2: Scatterplots
@@ -289,7 +289,7 @@ def main():
     fig.suptitle("1° and 2° PC Scatter Plot of the Dataset", fontsize=14, fontweight='bold')
     show_scatterplot(ax, 0, 1, x_t, y, legend_data, legend_color, '1° PC', '2°PC')
     plt.rcParams["figure.figsize"][0] = 6.25
-    # plt.savefig("report/img/fig02a.png", transparent=False, dpi=300, bbox_inches="tight")
+    # plt.savefig("../report/img/fig02a.png", transparent=False, bbox_inches="tight")
     fig.show()
 
     fig, ax = plt.subplots()
@@ -297,14 +297,14 @@ def main():
     fig.suptitle("3° and 4° PC Scatter Plot of the Dataset", fontsize=14, fontweight='bold')
     show_scatterplot(ax, 2, 3, x_t, y, legend_data, legend_color, '3° PC', '4°PC')
     plt.rcParams["figure.figsize"][0] = 6.25
-    # plt.savefig("report/img/fig02b.png", transparent=False, dpi=300, bbox_inches="tight")
+    # plt.savefig("../report/img/fig02b.png", transparent=False, bbox_inches="tight")
     fig.show()
     fig, ax = plt.subplots()
     # ax[1][1].axis('off')
     fig.suptitle("10° and 11° PC Scatter Plot of the Dataset", fontsize=14, fontweight='bold')
     show_scatterplot(ax, 9, 10, x_t, y, legend_data, legend_color, '10° PC', '11°PC')
     plt.rcParams["figure.figsize"][0] = 6.25
-    # plt.savefig("report/img/fig02c.png", transparent=False, dpi=300, bbox_inches="tight")
+    # plt.savefig("../report/img/fig02c.png", transparent=False, bbox_inches="tight")
     fig.show()
     fig, ax = plt.subplots()
     ax.axis('off')
@@ -319,7 +319,7 @@ def main():
     ax.legend()
     ax.grid(True)
     plt.rcParams["figure.figsize"][0] = 6.25
-    # plt.savefig("report/img/fig02d.png", transparent=False, dpi=300, bbox_inches="tight")
+    # plt.savefig("../report/img/fig02d.png", transparent=False, bbox_inches="tight")
     fig.show()
 
     # FIG 3: Variance
@@ -345,7 +345,7 @@ def main():
     ax2.set_ylabel('Cumulative Variance (%)')
     ax2.set_xlabel("#PC")
     plt.rcParams["figure.figsize"][0] = 6.25
-    # plt.savefig("report/img/fig03.png", transparent=False, dpi=300, bbox_inches="tight")
+    # plt.savefig("../report/img/fig03.png", transparent=False, bbox_inches="tight")
     fig.show()
 
     # 1.3 CLASSIFICATION
@@ -362,13 +362,13 @@ def main():
     plt.rcParams["figure.figsize"] = (7, 5)
     plot_decision_boundaries_gnb(x_t, y, 0, 2, x_train, y_train, x_test, y_test, "Classifier on 1° and 2° PC",
                                  legend_data, legend_color)
-    # plt.savefig("report/img/fig04.png", transparent=False, dpi=300, bbox_inches="tight")
+    # plt.savefig("../report/img/fig04.png", transparent=False, bbox_inches="tight")
 
     # Classifier on 3° and 4° PC
     plot_decision_boundaries_gnb(x_t, y, 2, 4, x_train, y_train, x_test, y_test, "Classifier on 3° and 4° PC",
                                  legend_data, legend_color)
     plt.rcParams["figure.figsize"] = (7, 5)
-    # plt.savefig("report/img/fig05.png", transparent=False, dpi=300, bbox_inches="tight")
+    # plt.savefig("../report/img/fig05.png", transparent=False, bbox_inches="tight")
 
     plt.show()
 

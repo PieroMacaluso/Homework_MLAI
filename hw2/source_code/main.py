@@ -15,7 +15,7 @@ from sklearn import svm, datasets
 import matplotlib
 
 # TODO: Change this to 252894 to obtain results of the report
-r_state = None
+r_state = 252894
 
 
 def make_meshgrid(x, y, h=.02):
@@ -103,7 +103,7 @@ def main():
     fig.suptitle("Linear SVM - C tuning - C_best = %2.2E A_best = %2.1f%%" % (c_best, a_best), fontsize=14,
                  fontweight='bold')
     plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0, rect=[0, 0.03, 1, 0.95])
-    # plt.savefig("report/img/fig01a.png", transparent=False, dpi=300)
+    # plt.savefig("../report/img/fig01a.png", transparent=False, dpi=300)
     fig.show()
 
     # fig01b
@@ -118,7 +118,7 @@ def main():
     plt.grid(True)
     ax.set_yticks(acc)
     plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0, rect=[0, 0.03, 1, 0.95])
-    # plt.savefig("report/img/fig01b.png", transparent=False, dpi=300)
+    # plt.savefig("../report/img/fig01b.png", transparent=False, dpi=300)
     fig.show()
 
     # fig01c
@@ -137,7 +137,7 @@ def main():
     ax.set_title('C=%2.2E A=%2.2f%% ' % (c_best, a))
     ax.legend()
     plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0, rect=[0, 0.03, 1, 0.95])
-    # plt.savefig("report/img/fig01c.png", transparent=False, dpi=300)
+    # plt.savefig("../report/img/fig01c.png", transparent=False, dpi=300)
     fig.show()
 
     # fig02a
@@ -170,7 +170,7 @@ def main():
     fig.suptitle("RBF Kernel - C/G tuning - C_best=%2.2E A_best=%2.2f%%" % (c_best, a_best), fontsize=14,
                  fontweight='bold')
     plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0, rect=[0, 0.03, 1, 0.95])
-    # plt.savefig("report/img/fig02a.png", transparent=False, dpi=300)
+    # plt.savefig("../report/img/fig02a.png", transparent=False, dpi=300)
     fig.show()
 
     # fig02b
@@ -184,7 +184,7 @@ def main():
     plt.grid(True)
     ax.set_yticks(acc)
     plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0, rect=[0, 0.03, 1, 0.95])
-    # plt.savefig("report/img/fig02b.png", transparent=False, dpi=300)
+    # plt.savefig("../report/img/fig02b.png", transparent=False, dpi=300)
     fig.show()
 
     # fig02c
@@ -205,7 +205,7 @@ def main():
     ax.set_title('C=%2.2E A=%2.2f%% ' % (c_best, a))
     ax.legend()
     plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0, rect=[0, 0.03, 1, 0.95])
-    # plt.savefig("report/img/fig02c.png", transparent=False, dpi=300)
+    # plt.savefig("../report/img/fig02c.png", transparent=False, dpi=300)
     fig.show()
 
     # Grid Search of C and Gamma
@@ -239,7 +239,7 @@ def main():
     plt.yticks(np.arange(len(c)), c)
     ax.set_title('C_best=%2.2E G_best=%2.2E A_best=%2.2f%%' % (c_best, g_best, a_best))
     plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0, rect=[0, 0.03, 1, 0.95])
-    # plt.savefig("report/img/fig02d.png", transparent=False, dpi=300)
+    # plt.savefig("../report/img/fig02d.png", transparent=False, dpi=300)
     fig.show()
 
     # fig02e
@@ -255,7 +255,7 @@ def main():
     ax.set_title('C=%2.2E Gamma=%2.2E  A=%2.2f%%' % (c_best, g_best, acc))
     ax.legend()
     plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0, rect=[0, 0.03, 1, 0.95])
-    # plt.savefig("report/img/fig02e.png", transparent=False, dpi=300)
+    # plt.savefig("../report/img/fig02e.png", transparent=False, dpi=300)
     fig.show()
 
     # Merging training and validation sets
@@ -267,24 +267,41 @@ def main():
     a_best = 0
     k = 5
     kf = KFold(n_splits=k, shuffle=True, random_state=r_state)
-    scores = np.zeros([len(gamma), len(c)])
-    for i, gamma_i in enumerate(gamma):
-        for j, c_i in enumerate(c):
+    res = np.zeros([c.shape[0], gamma.shape[0]])
+    for i, c_i in enumerate(c):
+        for j, gamma_i in enumerate(gamma):
             temp = np.zeros(kf.n_splits)
             for k_i, (train_index, test_index) in enumerate(kf.split(x_train)):
                 clf = svm.SVC(kernel='rbf', gamma=gamma_i, C=c_i)
                 clf.fit(x_train[train_index], y_train[train_index])
                 temp[k_i] = clf.score(x_train[test_index], y_train[test_index]) * 100
-            acc_av = np.average(temp)
-            if acc_av > a_best:
+            res[i, j] = np.average(temp)
+            if res[i, j] > a_best:
                 c_best = c_i
                 g_best = gamma_i
-                a_best = acc_av
+                a_best = res[i, j]
 
     clf = svm.SVC(kernel='rbf', gamma=g_best, C=c_best, random_state=r_state)
     acc = clf.fit(x_train, y_train).score(x_test, y_test) * 100
 
-    # fig03
+    # fig03a
+    fig, ax = plt.subplots()
+    fig.suptitle("RBF Kernel - C/G tuning - 5-fold Crossvalidation", fontsize=14, fontweight='bold')
+    fig.subplots_adjust(left=.2, right=0.95, bottom=0.15, top=0.95)
+    plt.imshow(res.reshape(len(c), len(gamma)), interpolation='nearest', cmap=plt.get_cmap("hot"))
+    ax.set_xlabel('gamma')
+    ax.set_ylabel('C')
+    plt.colorbar()
+    ax.grid(True)
+    ax.ticklabel_format(axis='both', style='sci')
+    plt.xticks(np.arange(len(gamma)), gamma, rotation=90)
+    plt.yticks(np.arange(len(c)), c)
+    ax.set_title('C_best=%2.2E G_best=%2.2E A_best=%2.2f%%' % (c_best, g_best, a_best))
+    plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0, rect=[0, 0.03, 1, 0.95])
+    # plt.savefig("../report/img/fig03a.png", transparent=False, dpi=300)
+    fig.show()
+
+    # fig03b
     fig, ax = plt.subplots()
     fig.suptitle("RBF Kernel K-Fold with validation accuracy of %2.2f%%" %
                  a_best, fontsize=14, fontweight='bold')
@@ -296,7 +313,7 @@ def main():
     ax.set_title('C=%2.2E Gamma=%2.2E  A=%2.2f%% ' % (c_best, g_best, acc))
     ax.legend()
     plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.0, rect=[0, 0.03, 1, 0.95])
-    # plt.savefig("report/img/fig03.png", transparent=False, dpi=300)
+    # plt.savefig("../report/img/fig03b.png", transparent=False, dpi=300)
     fig.show()
     plt.show()
 
