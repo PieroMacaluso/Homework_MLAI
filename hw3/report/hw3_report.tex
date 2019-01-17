@@ -5,6 +5,7 @@
 \usepackage{listings}
 \usepackage{color}
 \usepackage{booktabs}
+\usepackage{subcaption}
 \usepackage{caption}
 \usepackage{varioref}
 \usepackage[section]{placeins}
@@ -235,8 +236,76 @@
 
 	\FloatBarrier
 	
+	\section{Plotting Kernel and Output}
 	
+	I modified the functions provided in the original code (see \texttt{plotting2.py} and \texttt{plotting6.py}) in order to plot \textbf{kernels} and \textbf{output} of the \textbf{first convolutional layer} of the CNN of \cref{sect2} and the ResNet18 of \cref{final}. The results are shown in \vref{fig:07,fig:07a,fig:07b}.
+	
+	It is easy to notice in \cref{fig:07a} that the kernels of the first CNN don't describe a regular and particular shape because they have not been trained yet. On the other hand, the kernels of ResNet18 show particular patterns and shapes because they have already been trained.
+	
+	For this reason, it is possible to distinguish the original images in the outputs of ResNet18, while it is more difficult with the results of the Simple CNN. 
+	
+	Analyzing \cref{fig:07bb}, it is noticeable that every kernel in the ResNet (but in general in all CNN) highlights different aspects of the same image in order to extract features, even those invisible to the human eye. 
+	
+	\begin{figure}[h!]
+		\centering
+
+		\begin{subfigure}[h]{0.5\textwidth}
+			\centering
+			\includegraphics[width=1.2in]{img/fig07a.png}
+			\caption{32x32 bit resolution}
+		\end{subfigure}%
+		~ 
+		\begin{subfigure}[h]{0.5\textwidth}
+			\centering
+			\includegraphics[width=1.2in]{img/fig07b.png}
+			\caption{224x224 bit resolution}
+		\end{subfigure}
 		
+		\caption{Image of the CIFAR-100 used}
+		\label{fig:07}
+	\end{figure}
+
+\clearpage
+
+	
+	\begin{figure}[h!]
+		\centering
+		\begin{subfigure}[b]{1\textwidth}
+			\centering
+			\includegraphics[width=1\linewidth]{img/fig07a1.png}
+			\caption{Simple CNN}
+		\end{subfigure}
+	
+		\begin{subfigure}[b]{1\textwidth}
+			\centering
+			\includegraphics[width=1\linewidth]{img/fig07b1.png}
+			\caption{ResNet18}
+		\end{subfigure}
+		\caption{Kernels of First Convolutional Layer}
+		\label{fig:07a}
+	\end{figure}
+\clearpage
+
+	\begin{figure}[h!]
+		\centering
+		\begin{subfigure}[b]{1\textwidth}
+			\centering
+			\includegraphics[width=1\linewidth]{img/fig07a2.png}
+			\caption{Simple CNN}
+		\end{subfigure}
+		
+		\begin{subfigure}[b]{1\textwidth}
+			\centering
+			\includegraphics[width=1\linewidth]{img/fig07b2.png}
+			\caption{ResNet18}
+			\label{fig:07bb}
+		\end{subfigure}
+		\caption{Outputs of First Convolutional Layer}				\label{fig:07b}
+	\end{figure}
+	
+
+	
+	\clearpage
 	\section{Code Execution}
 	\subsection{Requirements}
 	\begin{itemize}
@@ -256,6 +325,7 @@
 		STEP 4: CNN4a.py or CNN4b.py or CNN4c.py\\
 		STEP 5: CNN5a.py or CNN5b.py\\
 		STEP 6: CNN6.py\\
+		STEP 7: plotting2.py or plotting6.py\\
 		
 	\end{itemize}
 	
@@ -272,6 +342,7 @@
 			\item \texttt{CNN4a.py}, \texttt{CNN4b.py}, \texttt{CNN4c.py} - Fourth Step Source Codes
 			\item \texttt{CNN5a.py}, \texttt{CNN5b.py} - Fifth Step Source Codes
 			\item \texttt{CNN6.py} - Sixth Step Source Codes
+			\item \texttt{plotting2.py}, \texttt{plotting6.py} - Optional step of the homework
 		\end{itemize}
 	\end{itemize}
 	%\fi %comment me out

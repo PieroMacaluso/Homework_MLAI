@@ -12,6 +12,7 @@ def main():
         print("-- STEP 4: CNN4a.py or CNN4b.py or CNN4c.py")
         print("-- STEP 5: CNN5a.py or CNN5b.py")
         print("-- STEP 6: CNN6.py")
+        print("-- STEP 7: plotting2.py or plotting6.py")
         return -1
 
     exec(open("./" + sys.argv[1]).read(), globals())
