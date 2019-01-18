@@ -84,7 +84,7 @@
 		\begin{figure}[ht!]
 			\centering
 			\includegraphics[width=0.65\paperwidth]{img/fig01.png}
-			\caption{Old NN Loss Accuracy graph}
+			\caption{Old NN (loss/accuracy graph)}
 			\label{fig:oldcnn}
 		\end{figure}
 	
@@ -101,7 +101,7 @@
 	\begin{figure}[ht!]
 		\centering
 		\includegraphics[width=0.65\paperwidth]{img/fig02.png}
-		\caption{Simple CNN Loss Accuracy graph}
+		\caption{Simple CNN (loss/accuracy graph)}
 		\label{fig:simplecnn}
 	\end{figure}
 
@@ -118,24 +118,24 @@
 	\begin{figure}[ht!]
 		\centering
 		\includegraphics[width=0.6\paperwidth]{img/fig03a.png}
-		\caption{CNN 128/128/128/256 Loss Accuracy graph}
+		\caption{CNN 128/128/128/256 (loss/accuracy graph)}
 		\label{fig:03a}
 	\end{figure}
 	\begin{figure}[ht!]
 		\centering
 		\includegraphics[width=0.6\paperwidth]{img/fig03b.png}
-		\caption{CNN 256/256/256/512 Loss Accuracy graph}
+		\caption{CNN 256/256/256/512 (loss/accuracy graph)}
 		\label{fig:03b}
 	\end{figure}
 	\begin{figure}[ht!]
 		\centering
 		\includegraphics[width=0.6\paperwidth]{img/fig03c.png}
-		\caption{CNN 512/512/512/1024 Loss Accuracy graph}
+		\caption{CNN 512/512/512/1024 (loss/accuracy graph)}
 		\label{fig:03c}
 	\end{figure}
 	
 	The training lasted about 9 minutes for the first CNN ($\boldsymbol{32\%}$ accuracy, $\boldsymbol{0.131}$ loss)  , 25 minutes for the second one ($\boldsymbol{35\%}$ accuracy, $\boldsymbol{0.078}$ loss) and 1 hour and 15 minutes for the last one ($\boldsymbol{36\%}$ accuracy, $\boldsymbol{0.047}$ loss), as shown in \vref{fig:03a,fig:03b,fig:03c}.
-	These data are better than the previous CNN ones, not only in terms of accuracy, but especially for as far as concerns the loss. Accuracies are not so high, while in all three cases the loss is very close to $0$. The parameters that the network has to learn increase with the number of filters. It is clear that both curves reach an asymptote.  
+	These data are better than the previous CNN ones, not only in terms of accuracy, but especially as far as concerns the loss. Accuracies are not so high, while in all three cases the loss is very close to $0$. The parameters that the network has to learn increase with the number of filters. It is clear that both curves reach an asymptote.  
 	This may be due, once again, to overfitting or co-adaptation, because, as in the previous section,  we are using a CNN without any type of regularization or improving techniques, which could led to better results, as we will see in next sections.
 		
 	\FloatBarrier
@@ -151,25 +151,25 @@
 	\begin{figure}[ht!]
 		\centering
 		\includegraphics[width=0.62\paperwidth]{img/fig04a.png}
-		\caption{CNN with Batch Normalization Loss Accuracy graph}
+		\caption{CNN with Batch Normalization (loss/accuracy graph)}
 		\label{fig:04a}
 	\end{figure}
 	\begin{figure}[ht!]
 		\centering
 		\includegraphics[width=0.62\paperwidth]{img/fig04b.png}
-		\caption{CNN with Batch Normalization and FC1 wider Loss Accuracy graph}
+		\caption{CNN with Batch Normalization and FC1 wider (loss/accuracy graph)}
 		\label{fig:04b}
 	\end{figure}
 
 	\begin{figure}[ht!]
 		\centering
 		\includegraphics[width=0.62\paperwidth]{img/fig04c.png}
-		\caption{CNN with Batch Normalization and Dropout $0.5$ on FC1 Loss Accuracy graph}
+		\caption{CNN with Batch Normalization and Dropout $0.5$ on FC1 (loss/accuracy graph)}
 		\label{fig:04c}
 	\end{figure}
 	\FloatBarrier
 	\newpage
-	The training lasted about $10$ minutes for the first CNN ($\boldsymbol{43\%}$ accuracy, $\boldsymbol{0.140}$ loss)  , $12$ minutes for the second one ($\boldsymbol{44\%}$ accuracy, $\boldsymbol{0.044}$ loss) and $10$ minutes for the last one ($\boldsymbol{44\%}$ accuracy, $\boldsymbol{0.630}$ loss), as shown in \vref{fig:04a,fig:04b,fig:04c}.
+	The training lasted about $10$ minutes for the first CNN ($\boldsymbol{43\%}$ accuracy, $\boldsymbol{0.140}$ loss)  , $12$ minutes for the second one ($\boldsymbol{44\%}$ accuracy, $\boldsymbol{0.044}$ loss) and $10$ minutes for the last one ($\boldsymbol{44\%}$ accuracy, $\boldsymbol{0.630}$ loss): the results can be seen in \vref{fig:04a,fig:04b,fig:04c}.
 	These data are better than the previous CNN ones in terms of accuracy ($10\%$ higher), while the loss is almost as low as before. 
 	These results are better, because we used regularization and improving techniques.
 	
@@ -195,13 +195,13 @@
 	\begin{figure}[ht!]
 		\centering
 		\includegraphics[width=0.65\paperwidth]{img/fig05a.png}
-		\caption{CNN with Random Horizontal Flipping Loss Accuracy graph}
+		\caption{CNN with Random Horizontal Flipping (loss/accuracy graph)}
 		\label{fig:05a}
 	\end{figure}
 	\begin{figure}[ht!]
 		\centering
 		\includegraphics[width=0.65\paperwidth]{img/fig05b.png}
-		\caption{CNN with Random Crop Loss Accuracy graph}
+		\caption{CNN with Random Crop (loss/accuracy graph)}
 		\label{fig:05b}
 	\end{figure}
 	\FloatBarrier	
@@ -223,7 +223,7 @@
 	\begin{figure}[ht!]
 		\centering
 		\includegraphics[width=0.62\paperwidth]{img/fig06.png}
-		\caption{ResNet18 pretrained with Random Horizontal Flipping Loss Accuracy graph}
+		\caption{ResNet18 pretrained with Random Horizontal Flipping (loss/accuracy graph)}
 		\label{fig:06}
 	\end{figure}
 
