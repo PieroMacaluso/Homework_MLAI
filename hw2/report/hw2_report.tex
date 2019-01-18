@@ -63,13 +63,13 @@
 %	\lstinputlisting[linerange={87-110},firstnumber=87,label={lst:linear},caption={Searching the best value of C},belowskip={1pt}]{../source_code/main.py}
 %	\lstinputlisting[linerange={109-110},firstnumber=109=label={lst:linear},aboveskip={1pt}]{../source_code/main.py}
 	
-	The plots in \vref{fig:linear1,fig:linear2}, provide information about the best accuracy found on validation set ($\boldsymbol{73.33\%}$), with $C$ equal to  $\boldsymbol{1\mathrm{e}{+1}}$. Clearly, that boundaries become more and more precise on the training set with the increment of $C$. 
+	The plots in \vref{fig:linear1,fig:linear2}, provide information about one run of the code: the best accuracy found on validation set was $73.33\%$, with $C$ equal to  $\boldsymbol{1\mathrm{e}{+1}}$. Clearly, that boundaries become more and more precise on the training set with the increment of $C$. 
 	
 	$C$ is the hyper parameter of SVM that represents the penalty for misclassifying a data point, so it describes how much SVM has to avoid misclassification during the training.
 	\textbf{When $\boldsymbol{C}$ is large}, the optimization will choose a smaller-margin hyperplane, because the classifier is heavily penalized for misclassified data.
 	The larger is $C$, the better the classification on training set will be. On the contrary, when \textbf{$\boldsymbol{C}$ is small}, the optimizer will use a larger-margin separating hyperplane, causing the misclassification of more training data points.
 	
-	After this training, I tested the data on the test set, obtaining a greater accuracy($\boldsymbol{88.89\%}$), as shown in \vref{fig:linear3}.  I tried to repeat the code a lot of times using a different \texttt{random\_state} variable, producing validation values from $60\%$ to $90\%$. This may be due to the initial state of the algorithm of SVM or the splitting of the data in training, validation and test sets: maybe in some cases there is more overfitting on the training data, whereas less in others. To sum up, this type of validation is not stable and may be influenced by overfitting (see \vref{final}).
+	After this training, I tested the data on the test set, obtaining a greater accuracy (88.89\%), as shown in \vref{fig:linear3}.  I tried to repeat the code $500$ times, producing validation accuracies of $\boldsymbol{80.03\%\pm6.62\%}$ and testing ones of $\boldsymbol{73.52\%\pm7.11\%}$ (see \vref{final}). The variances are high and this may be due to the initial state of the algorithm of SVM or the splitting of the data in training, validation and test sets: maybe in some cases there is more overfitting on the training data, whereas less in others. To sum up, this type of validation is not stable and may be influenced by overfitting.
 
 	
 	\begin{figure}[ht!]
@@ -103,17 +103,17 @@
 	
 	\textbf{Gamma parameter} can be explained as the \textit{spread} of the kernel, therefore of the decision region. When gamma is \textbf{low}, the \textit{curve} of the decision boundary is very low, consequently the decision region is very broad. When gamma is \textbf{high}, the \textit{curve} of the decision boundary is high and decision-\textit{islands} will arise around data points.
 	
-	Firstly, I repeated the steps of the previous section in order to find the best accuracy modifying $C$ and using the Gamma calculated by \texttt{sklearn} under the hood (see \vref{lst:rbf1}).  This time the boundaries are \textbf{not as linear as} the ones of Linear SVM, because of the introduction of the Gaussian RBF kernel. Thanks to this approach, I found out a better training accuracy ($\boldsymbol{76.67\%}$) compared to the Linear SVM one, and a test accuracy near to the validation one ($\boldsymbol{75.56\%}$) with $\boldsymbol{C=1\mathrm{e}{-1}}$, as shown in \vref{fig:rbf1,fig:rbf2,fig:rbf3}.
+	Firstly, I repeated the steps of the previous section in order to find the best accuracy modifying $C$ and using the Gamma calculated by \texttt{sklearn} under the hood (see \vref{lst:rbf1}).  This time the boundaries are \textbf{not as linear as} the ones of Linear SVM, because of the introduction of the Gaussian RBF kernel. Thanks to this approach, I found out, in the first run, a better training accuracy ($76.67\%$) compared to the Linear SVM one, and a test accuracy near to the validation one ($75.56\%$) with $\boldsymbol{C=1\mathrm{e}{-1}}$, as shown in \vref{fig:rbf1,fig:rbf2,fig:rbf3}.
 	
 	I used the code of \vref{lst:linear}, changing the classifier on line $88$ with the one in \vref{lst:rbf1} .
 	
 	\lstinputlisting[linerange={152-152},firstnumber=152,label={lst:rbf1},caption={RBF Kernel SVM Classifier}]{../source_code/main.py}
 	
-	Finally, I performed the grid search of the best pair of $C$ and $Gamma$ with \vref{lst:rbf2}. This time I obtained an high accuracy in validation ($\boldsymbol{80.00\%}$) and also on the test set ($\boldsymbol{86.67\%}$) with a $\boldsymbol{C=1\mathrm{e}{0}}$ and $\boldsymbol{\gamma=1\mathrm{e}{-1}}$, as we can see in \vref{fig:rbf4,fig:rbf5}.
+	Finally, I performed the grid search of the best pair of $C$ and $Gamma$ with \vref{lst:rbf2}. In the first run I obtained an high accuracy in validation ($\boldsymbol{80.00\%}$) and also on the test set ($\boldsymbol{86.67\%}$) with a $\boldsymbol{C=1\mathrm{e}{0}}$ and $\boldsymbol{\gamma=1\mathrm{e}{-1}}$, as we can see in \vref{fig:rbf4,fig:rbf5}.
 	
 	\lstinputlisting[ linerange={211-227},firstnumber=211,label={lst:rbf2},caption={Searching the best value of C and Gamma in RBF Kernel SVM}]{../source_code/main.py}
 	
-	I repeated this code a lot of times and, even then, I found out a great variation of results in validation and test scores (see \vref{final}).
+	I repeated this code $500$ times and, even then, I found out an high variance in validation ($\boldsymbol{82.11\%\pm6.13\%}$) and test ($\boldsymbol{76.86\%\pm6.23\%}$) scores  (see \vref{final}).
 	
 	\begin{figure}[ht!]
 		\centering
@@ -157,9 +157,9 @@
 	
 	\lstinputlisting[ linerange={265-282},firstnumber=265,label={lst:knn},caption={Validation using k-fold with $k=5$}]{../source_code/main.py}
 	
-	I obtained validation accuracy equal to $\boldsymbol{76.19\%}$, but a test accuracy of $\boldsymbol{82.22\%}$ with a $\boldsymbol{C=1\mathrm{e}{0}}$ and $\boldsymbol{\gamma=1\mathrm{e}{-1}}$ (see \vref{fig:knn1,fig:knn2}).
+	In the first run, I obtained a validation accuracy equal to $76.19\%$, but a test accuracy of $82.22\%$ with a $\boldsymbol{C=1\mathrm{e}{0}}$ and $\boldsymbol{\gamma=1\mathrm{e}{-1}}$ (see \vref{fig:knn1,fig:knn2}).
 	
-	The final score is satisfying, although it is lower than some of the final scores found in previous sections. I tried to run the code multiple times changing \texttt{random\_state} and I have always found values from $75\%$ to $85\%$  (see \vref{final}).
+	The final score is satisfying, although it is lower than some of the final scores found in previous sections. I tried to run the code $500$ times obtaining a validation accuracy of $\boldsymbol{81.17\%\pm2.44\%}$ and a testing one of $\boldsymbol{78.14\%\pm5.38\%}$  (see \vref{final}).
 	
 	\begin{figure}[ht!]
 		\centering
@@ -177,8 +177,8 @@
 
 	\section{Final Comments} \label{final}
 	
-	Because of the continuous variation of results for different \texttt{random\_state}, I decided to implement a simple Python script (\texttt{testing.py}) to calculate the average of the results of the three main type of parameter tuning algorithm in order to find something remarkable.
-	The result obtained over 200 repetitions can be found in \vref{table1,table2}.
+	I decided to implement a simple Python script (\texttt{testing.py}) in order to calculate the mean and the variance of the results and to to better evaluate the three types of parameter tuning algorithm explained in this report .
+	The result obtained over 500 repetitions can be found in \vref{table1}.
 
 	\begin{table}[!h]
 		\centering
@@ -186,24 +186,10 @@
 		\label{table1}
 		\begin{tabular}{@{}lllll@{}}
 			\toprule
-			\textbf{Accuracy (\%)} (200 rep.)		& AVG Validation	& STD Validation	& AVG Test		& STD Test \\ \midrule
-			Linear SVM				& $\approx80$	 	&  $\approx7$		& $\approx73$ & $\approx7$ \\
-			RBF Kernel SVM			& $\approx82$	 	&  $\approx6$		& $\approx76$ & $\approx6$ \\
-			RBF Kernel SVM (k-fold)	& $\approx81$	 	&  $\approx2$		& $\approx78$ & $\approx5$ \\ \bottomrule
-		\end{tabular}
-	\end{table}
-
-	\begin{table}[!h]
-		\centering
-		\caption{Min and Max}
-		\label{table2}
-		\begin{tabular}{@{}lllll@{}}
-			
-			\toprule
-			\textbf{Accuracy (\%)} (200 rep.)		& MIN Validation	& MAX Validation	& MIN Test		& MAX Test \\ \midrule
-			Linear SVM				& $\approx60$	 	&  $\approx95$		& $\approx50$ & $\approx95$ \\
-			RBF Kernel SVM			& $\approx60$	 	&  $\approx95$		& $\approx60$ & $\approx95$ \\
-			RBF Kernel SVM (k-fold)	& $\approx75$	 	&  $\approx87$		& $\approx60$ & $\approx95$ \\ \bottomrule
+			\textbf{Accuracy (\%)} (500 rep.)		& AVG Validation	& STD Validation	& AVG Test		& STD Test \\ \midrule
+			Linear SVM				& $80.03$	 	&  $6.62$		& $73.52$ & $7.11$ \\
+			RBF Kernel SVM			& $82.11$	 	&  $6.13$		& $76.86$ & $6.23$ \\
+			RBF Kernel SVM (k-fold)	& $81.17$	 	&  $2.44$		& $78.14$ & $5.38$ \\ \bottomrule
 		\end{tabular}
 	\end{table}
 
@@ -236,7 +222,7 @@
 		\begin{itemize}
 			\item \texttt{main.py}
 			\item \texttt{requirements.txt}
-			\item \texttt{testing.py} - Code used in final comments
+			\item \texttt{testing.py} - Code used for testing in final comments
 		\end{itemize}
 	\end{itemize}
 	%\fi %comment me out

@@ -1,5 +1,5 @@
-from sklearn import datasets, svm
 import numpy as np
+from sklearn import datasets, svm
 from sklearn.model_selection import train_test_split, KFold
 
 r_state = None
@@ -88,21 +88,21 @@ def linear_test(x, y):
 def main():
     (x, y) = datasets.load_iris(return_X_y=True)
     x = x[:, :2]
-    arr = np.empty(200)
-    scores = np.empty(200)
-    for index in range(0, 200):
+    times = 500
+    arr = np.empty(times)
+    scores = np.empty(times)
+    for index in range(0, times):
+        # TODO: Uncomment the line of the algorithm you want to test
         # (arr[index], scores[index]) = linear_test(x, y)
-        (arr[index], scores[index]) = knn_rbf_test(x, y)
         # (arr[index], scores[index]) = rbf_test(x, y)
-        print(index, "\t", arr[index], "1t", scores[index])
+        # (arr[index], scores[index]) = knn_rbf_test(x, y)
+        print(index, "\t", arr[index], "\t", scores[index])
+    print("VALIDATION")
     print("Average : %f%%" % np.mean(arr))
-    print("Variance: %f" % np.std(arr))
-    print("Min: %f%%" % np.min(arr))
-    print("Max: %f" % np.max(arr))
+    print("Variance: %f" % np.std(arr, ddof=1))
+    print("TESTING")
     print("Average: %f%%" % np.mean(scores))
-    print("Variance: %f" % np.std(scores))
-    print("Min: %f%%" % np.min(scores))
-    print("Max: %f" % np.max(scores))
+    print("Variance: %f" % np.std(scores, ddof=1))
 
 
 if __name__ == "__main__":

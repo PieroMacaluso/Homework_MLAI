@@ -15,7 +15,7 @@ from sklearn import svm, datasets
 import matplotlib
 
 # TODO: Change this to 252894 to obtain results of the report
-r_state = 252894
+r_state = None
 
 
 def make_meshgrid(x, y, h=.02):
