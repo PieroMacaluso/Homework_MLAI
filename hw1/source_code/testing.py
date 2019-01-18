@@ -268,10 +268,13 @@ def main():
     for index in range(0, times):
         (res1[index], res2[index], res3[index]) = classification(x_n, x_t, y)
         print(index, "\t", res1[index], "\t", res2[index], "\t", res3[index])
+    print("NORMALIZED DATA")
     print("Average : %f%%" % np.mean(res1))
     print("Variance: %f" % np.std(res1, ddof=1))
+    print("PROJECTION 1-2PC")
     print("Average: %f%%" % np.mean(res2))
     print("Variance: %f" % np.std(res2, ddof=1))
+    print("PROJECTION 3-4PC")
     print("Average: %f%%" % np.mean(res3))
     print("Variance: %f" % np.std(res3, ddof=1))
 
