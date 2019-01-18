@@ -4,6 +4,7 @@
 \documentclass[a4paper, 11pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
+\usepackage{booktabs}
 \usepackage{array}
 \usepackage{listings}
 \usepackage{color}
@@ -120,7 +121,7 @@
 	
 	It is noticeable that the range of coordinates in the graphs was about inversely proportional to the position of PC used, or, better, that the points in the scatter plot were getting closer and closer to the mean value (which is $0$ because of normalization), causing a \textbf{decrease in variance}. This can be explained from theoretical perspective because, in the definition of PCA transformation, the first principal component has the \textbf{largest variance}, and each succeeding component in turn has the highest variance possible under the constraint that it is \textbf{orthogonal} to the preceding components.
 	
-	Plotting the cumulative sum of variance ratio (provided in the PCA of \texttt{sklearn}) may be useful in order to decide how many components are necessary to preserve data without so many distortions. In general, there is not a right and unique way to select the \textit{correct} number of principal  components, but in this context we can analyze the graph in \vref{fig:variance} and select a number of PC characterized by a cumulative sum of variance ratio higher than a specific threshold (e.g., $95\%$).
+	Plotting the cumulative sum of variance ratio (provided in the PCA of \texttt{sklearn}) may be useful in order to decide how many components are necessary to preserve data without so many distortions. In general, there is not a single correct way to select the \textit{right} number of principal  components. For instance, in this context, we can analyze the graph in \vref{fig:variance} and select a number of PC characterized by a cumulative sum of variance ratio higher than a specific threshold (e.g., $95\%$).
 	
 	\begin{figure}[ht!]
 		\centering
@@ -174,21 +175,34 @@
 	
 	I plotted \textbf{decision boundaries} of the classifier and the projection of the whole dataset for both cases, as we can see in \vref{fig:class1,fig:class2}.
 	
+	I tried to repeat the three different classifications $500$ times (code in \texttt{testing.py}) and I found out the results shown in \vref{table1}
 	
-	Comparing accuracy results, I is clear that classifications done after the application of PCA are worse than the one applied on the original normalized dataset. Moreover, the accuracy of classifier on $1$st and $2$nd PC is higher than the one of classifier on $3$rd and $4$th PC, probably because of the different variance that a specific component can describe.
+	\begin{table}[!ht]
+		\centering
+		\caption{Accuracy distribution}
+		\label{table1}
+		\begin{tabular}{@{}lllll@{}}
+			\toprule
+			(500 rep.)		& Normalized Data	& Projection 1-2 PC & Projection 3-4 PC	\\ \midrule
+			\textbf{Accuracy (\%)}			& $75.97\pm2.44$ & $61.27\pm2.57$& $45.74\pm2.72$	 	\\ \bottomrule
+		\end{tabular}
+	\end{table}
+	
+	
+	Comparing accuracy results, It is clear that classifications done after the application of PCA are worse than the one applied on the original normalized dataset. Moreover, the accuracy of classifier on $1$-$2$ PC is higher than the one of classifier on $3$-$4$ PC, probably because of the different variance that a specific component can describe.
 	This may be due to the fact that reducing dimensionality may discard important information useful to discriminate a class from the others in a classifier.
 	
-	\lstinputlisting[float,linerange={183-224},firstnumber=183,label={lst:classification},caption={Classification and Plot of Decision boundaries}]{../source_code/main.py}
+	\lstinputlisting[linerange={183-224},firstnumber=183,label={lst:classification},caption={Classification and Plot of Decision boundaries}]{../source_code/main.py}
 
 	\begin{figure}[ht!]
 		\centering
-		\includegraphics[height=0.52\paperwidth]{img/fig04.png}
+		\includegraphics[width=0.85\textwidth]{img/fig04.png}
 		\caption{Decision boundaries of first classifier on $1$st and $2$nd PC}
 		\label{fig:class1}
 	\end{figure}
 	\begin{figure}[ht!]
 		\centering
-		\includegraphics[height=0.52\paperwidth]{img/fig05.png}
+		\includegraphics[width=0.85\textwidth]{img/fig05.png}
 		\caption{Decision boundaries of classifier on $3$rd and $4$th PC}
 		\label{fig:class2}
 	\end{figure}
@@ -226,6 +240,7 @@
 		\item \texttt{source\_code} folder:
 		\begin{itemize}
 			\item \texttt{main.py}
+			\item \texttt{testing.py} - Code used for testing classifications
 			\item \texttt{requirements.txt}
 		\end{itemize}
 	\end{itemize}
